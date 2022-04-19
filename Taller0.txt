@@ -31,12 +31,6 @@ public class Talleres {
 		matrizHechizosJugador[i][j] = 0;
             }
 	}
-		
-		
-		
-	
-	
-        
         cantJugadoresInscritos = lecturaJugadores(jugadores, contraseñas, matrizEstadisticasJugadores, cantJugadoresInscritos);
 	cantHechizosInscritos = lecturaHechizos(hechizos, poderHechizos);
 	lecturaHechizosJugadores(jugadores,hechizos,matrizHechizosJugador);
@@ -46,7 +40,6 @@ public class Talleres {
         String nombreSesion = read.nextLine();
         int sesion = iniciarSesion(jugadores, contraseñas, nombreSesion, cantJugadoresInscritos);
         System.out.println("sesion"+sesion);
-        
         
         while (sesion == -1){
             System.out.print("Ingrese su nombre de usuario: ");
@@ -263,11 +256,7 @@ public class Talleres {
         
       }
       
-      return existe;
-      
-    
-      
-      
+      return existe;   
   }
   
   //combate(jugadores, enemigos, hechizos, poderHechizos, matrizEstadisticasJugadores, matrizEnemigos, matrizHechizosJugador);
