@@ -341,10 +341,75 @@ public class Talleres {
               System.out.println("SE TE HAN BRINDADO "+puntosEXP+" puntos de experiencia");
               
           }
+	  
                   
           
       }
   }
+  public static void escrituraJugadores (String [] jugadores,String [] contraseñas,int [][] matrizEstadisticasJugadores,int cantJugadoresInscritos){
+        File arch = new File("Jugadores.txt");
+        try{
+            PrintWriter escritura = new PrintWriter(arch);
+            for (int i = 0; i < cantJugadoresInscritos; i++) {
+                String linea = jugadores[i] + "," + contraseñas[i];
+                for (int j = 0; j < 6; j++) {
+                    linea = linea + "," + matrizEstadisticasJugadores[i][j];
+                escritura.println(linea);
+                }
+            }
+            escritura.close();
+        }catch  (IOException ex){
+        }
+    }
+    
+    public static void  escrituraHechizos (String [] hechizos,int [] poderHechizos,int cantHechizosInscritos){
+        File arch = new File("Hechizos.txt");
+        try{
+            PrintWriter escritura = new PrintWriter(arch);
+            String linea;
+            for (int i = 0; i < (cantHechizosInscritos); i++) {
+                linea = hechizos[i] +","+ poderHechizos[i];
+                escritura.println(linea);
+            }
+            escritura.close();
+        }catch (IOException ex){            
+        }   
+    }
+    
+    public static void escrituraHechizosJugador (String [] jugadores,String [] hechizos,int [][] matrizHechizosJugador,int cantHechizosInscritos,int cantJugadoresInscritos){
+        File arch = new File("Hechizos.txt");
+        try{
+            PrintWriter escritura = new PrintWriter(arch);
+            String linea;
+            for (int i = 0; i < cantJugadoresInscritos ; i++) {
+                for (int j = 0; j < cantHechizosInscritos; j++) {
+                    if (matrizHechizosJugador[i][j] != 0){
+                        linea = jugadores[i] +","+ hechizos[j];
+                        escritura.println(linea);
+                    }                
+                }    
+            }
+            escritura.close();
+        }catch (IOException ex){
+        }
+    }
+
+    public static void escrituraEnemigo(String [] enemigos,int cantEnemigosInscritos,String [][] matrizEnemigos){
+       File arch = new File("Enemigo.txt");
+        try{
+            PrintWriter escritura = new PrintWriter(arch);
+            for (int i = 0; i <cantEnemigosInscritos; i++) {
+                String linea = enemigos[i];
+                for (int j = 0; j < 4; j++) {
+                    linea = linea + "," + matrizEnemigos[i][j];
+                escritura.println(linea);
+        
+                }
+            }
+            escritura.close();
+        }catch  (IOException ex){
+        }     
+    }
   public static int numeroRandom (int tope){
       Random rand = new Random();
       int numeroAleatorio = rand.nextInt(tope); 
