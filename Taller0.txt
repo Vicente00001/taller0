@@ -1,0 +1,354 @@
+
+package talleres;
+
+
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Scanner;
+import java.util.Random;
+
+public class Talleres {
+  public static void main(String[] args) throws IOException {
+	Scanner read = new Scanner(System.in);	
+	String [] jugadores = new String [1000];  
+	String [] contraseñas = new String [1000];
+	String [] enemigos = new String [1000];
+	String [] hechizos = new String [1000];
+	int [] poderHechizos = new int [1000];
+	
+	int cantJugadoresInscritos = 0;
+        int cantHechizosInscritos = 0;
+	int cantEnemigosInscritos = 0;
+	
+	int [][] matrizEstadisticasJugadores = new int [1000][6];
+	String [][] matrizEnemigos = new String [1000][4];
+	int [][] matrizHechizosJugador = new int [1000][1000];
+                
+                
+        for(int i = 0;i<1000;i++) {
+            for(int j = 0;j<1000;j++) {
+		matrizHechizosJugador[i][j] = 0;
+            }
+	}
+		
+		
+		
+	
+	
+        
+        cantJugadoresInscritos = lecturaJugadores(jugadores, contraseñas, matrizEstadisticasJugadores, cantJugadoresInscritos);
+	cantHechizosInscritos = lecturaHechizos(hechizos, poderHechizos);
+	lecturaHechizosJugadores(jugadores,hechizos,matrizHechizosJugador);
+	//cantEnemigosInscritos = lecturaEnemigos(enemigos, matrizEnemigos, cantEnemigosInscritos);
+	
+        System.out.print("Ingrese su nombre de usuario: ");
+        String nombreSesion = read.nextLine();
+        int sesion = iniciarSesion(jugadores, contraseñas, nombreSesion, cantJugadoresInscritos);
+        System.out.println("sesion"+sesion);
+        
+        
+        while (sesion == -1){
+            System.out.print("Ingrese su nombre de usuario: ");
+            nombreSesion = read.nextLine();
+            sesion = iniciarSesion(jugadores, contraseñas,nombreSesion, cantJugadoresInscritos);
+        }
+        while (sesion != -5){
+            System.out.println("___________________");
+            System.out.println("Bienvenid@ al menú");
+            System.out.println("[1] COMBATE\n[2] APRENDER UN HECHIZO\n[3] VER ESTADISTICAS DEL JUGADOR\n[4] VER ESTADISTICAS HECHIZOS\n[5] VER RANKING JUGADORES\n[6] SALIR DEL JUEGO Y SOBRESCRIBIR ARCHIVOS");
+                //[1] COMBATE
+		//[2] APRENDER UN HECHIZO
+		//[3] VER ESTADÍSTICAS DEL JUGADOR
+		//[4] VER ESTADISTICAS DE HECHIZOS
+		//[5] VER RANKING JUGADORES
+		//[6] cerrar juego
+            System.out.print("¿Qué deseas hacer?: ");
+            int opcionMenu = read.nextInt();
+            while (opcionMenu != 1 && opcionMenu != 2 && opcionMenu != 3 && opcionMenu != 4 && opcionMenu != 5 && opcionMenu != 6){
+                System.out.print("Por favor, selecciona un número del menú: ");
+                opcionMenu = read.nextInt();
+            }
+            if (opcionMenu == 1){
+		combate(jugadores, enemigos, hechizos, poderHechizos, matrizEstadisticasJugadores, matrizEnemigos, matrizHechizosJugador, cantJugadoresInscritos, cantEnemigosInscritos, sesion);
+                //(String [] jugadores, String[] hechizos, int [] poderHechizos, int [][] matrizEJ, String [][] matrizEnemigos, int [][] matrisHJ, int cantidadJugadores, int cantidadEnemigos, int jugadorSesion)
+                
+            }
+            if (opcionMenu == 2){
+                //aprenderHechizo(hechizos, matrizEstadisticasJugadores, matrizHechizosJugador);
+            }
+            if (opcionMenu == 3){
+                //desplegarEstadisticaJugador(jugadores, matrizEstadisticasJugadores);
+            }
+            if (opcionMenu == 4){
+                //desplegarEstadisticaHechizos(jugadores, matrizHechizosJugador);
+            }
+            if (opcionMenu == 5){
+                //desplegarRanking(jugadores, matrizEstadisticasJugadores);
+            }
+            if (opcionMenu == 6){
+                sesion = -5;
+                System.out.println("Usted ha salido satisfactoriamente de su sesión");
+            }
+        }
+		//busquedaLista(lista, elemento) ESTA LISTA
+		//busquedaMatriz(matriz, elemento);                      
+
+		//*dentro de iniciar sesión*
+		
+		//admin(jugador, contraseñas, matrizEstadisticasJugadores, matrizHechizosJugador, enemigos, matrizEnemigos, hechizos, poderHechizos);
+		
+		//sobreescribirArchivos()
+		
+		
+		
+	}
+  public static int busquedaLista(String[]lista, String nombre, int cant) throws IOException{
+      int existe = -5;
+      int i;
+
+      for (i = 0; i < cant; i++){
+          
+          if(lista[i].equalsIgnoreCase(nombre)){
+            
+            existe = i;
+            break;
+          }
+      }
+      //if (i == lista.length){
+        //  System.out.println("NO ENCONTRADO EN LA LISTA");
+      //}
+      return existe;
+     
+}
+       
+  public static int lecturaJugadores(String [] jugadores, String [] contraseñas, int [][] matrizEJ, int cont) throws IOException {
+		Scanner arch = new Scanner (new File("C:\\Users\\chipa\\Desktop\\Taller 0\\Jugadores.txt"));
+		cont = 0;
+		while (arch.hasNextLine()) {
+                    
+		    String linea = arch.nextLine();
+		    String [] datos = linea.split(",");
+		    String nombreJ = datos[0];
+		    String contra = datos[1];
+		    
+		    jugadores[cont] = nombreJ;
+                    //System.out.println(jugadores[cont]);
+		    contraseñas[cont] = contra;
+		    int j = 2; //Indice del dato de la linea (estadisticas)
+		    for(int i=0;i<6;i++){
+		    	matrizEJ[cont][i]= Integer.parseInt(datos[j]);
+
+		    	j++;
+		    }
+		    
+		    cont ++;
+		}
+    arch.close();
+		
+		return cont;
+		
+	}
+  public static int lecturaHechizos(String [] hechizos, int [] poderHechizos)throws IOException{
+      int cont;
+      try (Scanner arch = new Scanner(new File("C:\\Users\\chipa\\Desktop\\Taller 0\\Hechizos.txt"))) {
+          cont = 0;
+          while(arch.hasNextLine()) {
+              String linea = arch.nextLine();
+              String [] datos = linea.split(",");
+              String hechizo = datos[0];
+              int poder = Integer.parseInt(datos[1]);
+              
+              hechizos[cont] = hechizo;
+              poderHechizos[cont] = poder;
+              cont++;
+          } }
+    return cont;
+  }
+  public static void lecturaHechizosJugadores (String [] jugadores,String [] hechizos, int [][] matrizHechizosJugador)throws IOException{
+	Scanner arch = new Scanner(new File("C:\\Users\\chipa\\Desktop\\Taller 0\\HechizosJugadores.txt"));
+	int cont = 0;
+	while (arch.hasNextLine()){
+            
+          String linea = arch.nextLine();
+	  String [] datos = linea.split(",");
+	  String jugador = datos[0];
+          String hechizo = datos[1];
+
+          //if (matrizHechizosJugador[busquedaLista(jugadores,jugador)][busquedaLista(hechizos,hechizo)] != 0){
+            //matrizHechizosJugador[busquedaLista(jugadores,jugador)][busquedaLista(hechizos,hechizo)]++;
+            //}
+          cont ++;
+	}
+    }
+  
+  public static int lecturaEnemigos(String [] enemigos, String [][] matrizEnem, int cantEnem)throws IOException{
+	    Scanner arch = new Scanner(new File("C:\\Users\\chipa\\Desktop\\Taller 0\\Enemigo.txt"));
+	    cantEnem = 0;
+	    while (arch.hasNextLine()){
+	      String linea = arch.nextLine();
+	      String [] datos = linea.split(",");
+	      String nombreEn = datos[0];
+	      
+	      enemigos[cantEnem] = nombreEn;
+		  
+		int j = 1; //Indice del dato de la linea (estadisticas)
+		  for(int i=0;i<4;i++){
+                    matrizEnem[cantEnem][i]= datos[j];
+                    j++;
+		}
+              cantEnem++;
+	    }
+	    arch.close();
+	    return cantEnem;
+	  }
+
+  public static int iniciarSesion(String [] jugadores, String [] contraseñas,String nombre, int cantJugadoresInscritos)throws IOException{
+      
+      Scanner read = new Scanner(System.in);	
+      String usuario = nombre;
+      int existe;
+      existe = busquedaLista(jugadores, usuario, cantJugadoresInscritos);
+      
+      if (existe != -5){
+          System.out.println("Nombre encontrado!");
+          System.out.print("Ingrese su contraseña: ");
+          String contraseñaSesion = read.nextLine();
+          
+          int contraseñaCorrecta = 0;
+          while (contraseñaCorrecta != 1){
+              
+              if(contraseñas[existe].equals(contraseñaSesion)){
+                  contraseñaCorrecta = 1;
+                  System.out.println("Inicio de sesión satisfactorio!");
+                  
+              }else{
+                  System.out.print("Contraseña incorrecta, intente nuevamente: ");
+                  contraseñaSesion = read.nextLine();
+                  
+              }
+          }
+          
+      }else{
+        System.out.println("_____________________________________________"); 
+        System.out.println("USUARIO NO ENCONTRADO"); 
+        System.out.print("¿Desea agregar un nuevo jugador?[1] SI [2] NO: ");
+        int agregarJugador = read.nextInt();
+            
+        while(agregarJugador != 1 && agregarJugador != 2 ){
+            System.out.print("Porfavor, ingrese solo 1 o 2: ");
+            agregarJugador = read.nextInt();
+        }   
+        if(agregarJugador == 1){
+            //agregarNuevoJugador(jugadores,contraseñas,nombreSesion,matrizEstadisticasJugadores);
+        }
+        else if(agregarJugador == 2){
+            System.out.println("---------------------------------");
+            System.out.println("[1] INGRESAR DATOS NUEVAMENTE");
+            System.out.println("[2] SALIR DEL SISTEMA");
+            System.out.println("¿Como desea proceder?: ");
+            int decision = read.nextInt();
+            
+            while(decision != 1 && decision != 2 ){
+                System.out.print("Porfavor, ingrese solo 1 o 2: ");
+                decision = read.nextInt();
+            }
+            
+            if (decision == 1){
+                existe = -1;
+            }
+            
+        }
+            
+        
+      }
+      
+      return existe;
+      
+    
+      
+      
+  }
+  
+  //combate(jugadores, enemigos, hechizos, poderHechizos, matrizEstadisticasJugadores, matrizEnemigos, matrizHechizosJugador);
+
+    /**
+     *
+     * @param jugadores 
+     * @param enemigos 
+     * @param hechizos
+     * @param poderHechizos
+     * @param matrizEJ
+     * @param matrizEnemigos
+     * @param matrisHJ
+     * @param cantidadJugadores
+     * @param cantidadEnemigos
+     * @param jugadorSesion
+     * @throws java.io.IOException
+     */
+  public static void combate(String [] jugadores,String [] enemigos, String[] hechizos, int [] poderHechizos, int [][] matrizEJ, String [][] matrizEnemigos, int [][] matrisHJ, int cantidadJugadores, int cantidadEnemigos, int jugadorSesion) throws IOException{
+      //COMBATE CONTRA enToRNO O ENEMIGO
+      Scanner read = new Scanner(System.in);
+      System.out.println("***************************");
+      System.out.println("[1] Combate contra ENTORNO JvsE");
+      System.out.println("[2] Combate contra JUGADOR JvsJ");
+      System.out.print("¿Qué desea hacer?: ");
+      int decision = read.nextInt();
+      while (decision != 1 && decision !=2){
+          System.out.print("INGRESO INCORRECTO\nPor favor, escriba 1 o 2 solamente: ");
+          decision = read.nextInt();
+      }
+      if(decision == 1){
+          int contrincante = numeroRandom (cantidadEnemigos);
+          //jugadorSesion vs contrincante
+          int vidaJ = matrizEJ[jugadorSesion][1];
+          int vidaE = Integer.parseInt(matrizEnemigos[contrincante][1]);
+          if (matrizEJ[jugadorSesion][5] > Integer.parseInt(matrizEnemigos[contrincante][4])){
+              //comienza el jugador
+          }
+          else{
+              //comienza el enemigo
+              //realizar ataque altoke
+              vidaJ =vidaJ - Integer.parseInt(matrizEnemigos[contrincante][2]);
+              
+          }
+          while(vidaJ>0 && vidaE>0){
+              //actualizar vida
+          }
+          if (vidaJ <=0){
+              System.out.println("Usted ha sido derrotado por "+matrizEnemigos[contrincante][0]);
+          }
+          else if (vidaE <=0){
+              int puntosEXP = 0;
+              if (matrizEnemigos[contrincante][3].equals("S")){
+                  puntosEXP = 1000;
+              }
+              if (matrizEnemigos[contrincante][3].equals("A")){
+                  puntosEXP = 750;
+              }
+              if (matrizEnemigos[contrincante][3].equals("B")){
+                  puntosEXP = 500;
+              }
+              if (matrizEnemigos[contrincante][3].equals("C")){
+                  puntosEXP = 250;
+              }
+              if (matrizEnemigos[contrincante][3].equals("F")){
+                  puntosEXP = 100;
+              }
+              
+              System.out.println("Haz derrotado a tu contrincante!");
+              matrizEJ[jugadorSesion][7] += puntosEXP;
+              System.out.println("SE TE HAN BRINDADO "+puntosEXP+" puntos de experiencia");
+              
+          }
+                  
+          
+      }
+  }
+  public static int numeroRandom (int tope){
+      Random rand = new Random();
+      int numeroAleatorio = rand.nextInt(tope); 
+      
+      return numeroAleatorio;
+  }
+}
